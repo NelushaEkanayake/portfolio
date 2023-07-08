@@ -1,9 +1,7 @@
-//import React from "react";
-import React, { useRef } from "react";
-import emailjs from "emailjs-com";
-
-
-
+import React from "react";
+//import React, { useRef } from "react";
+//import emailjs from "emailjs-com";
+//import emailjs from "@emailjs/browser";
 export default function Contact() {
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
@@ -17,21 +15,23 @@ export default function Contact() {
       .join("&");
   }
 
+  function handleSubmit(e) {
+    e.preventDefault();
+    fetch("/", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: encode({ "form-name": "contact", name, email, message }),
+    })
+      .then(() => alert("Message sent!"))
+      .catch((error) => alert(error));
+  }
+
+
+
+
   
     
-    const form = useRef();
-
-  const sendEmail = (e) => {
-    e.preventDefault();
-
-    emailjs.sendForm('service_257jo1d', 'template_j4bp86u', form.current, 'NSVI_R_ekKLSElWkJ')
-      .then((result) => {
-          alert("Message sent!");
-          console.log(result.text);
-      }, (error) => {
-          console.log(error.text);
-      });
-  };
+    
   
 
   return (
@@ -77,8 +77,8 @@ export default function Contact() {
         <form
           netlify
           name="contact"
-          
-          className="lg:w-1/3 md:w-1/2 flex flex-col md:ml-auto w-full md:py-8 mt-8 md:mt-0" ref={form} onSubmit={sendEmail}>
+          onSubmit={handleSubmit}
+          className="lg:w-1/3 md:w-1/2 flex flex-col md:ml-auto w-full md:py-8 mt-8 md:mt-0">
           <h2 className="text-white sm:text-4xl text-3xl mb-1 font-medium title-font">
             Hire Me
           </h2>
